@@ -13,3 +13,6 @@ Then a revised version of the animation (the bitmap frames of Oscar minus the or
 It seems to work pretty well, although the app now needs even more permissions: in addition to disk access, it needs permission to run automation (via System Events) and then to use Accessbility.
 
 The position and scale of the Oscar animation in relation to the trash icon could do with a little fine tuning, but it’s good enough for now.
+
+https://user-images.githubusercontent.com/10506323/215374627-25e8b54f-9df1-491a-ae77-11b067845520.mp4
+
