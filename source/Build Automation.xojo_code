@@ -48,6 +48,7 @@
 					FolderItem = Li4vLi4vZnJhbWVzLzMwLnBuZw==
 					FolderItem = Li4vLi4vZnJhbWVzLzMxLnBuZw==
 					FolderItem = Li4vLi4vZnJhbWVzLzMyLnBuZw==
+					FolderItem = Li4vLi4vaW1hZ2VzL2Fib3V0LnBuZw==
 				End
 				Begin IDEScriptBuildStep ScriptDropBoxIgnoreDebug , AppliesTo = 1, Architecture = 0
 					// can use native (unescaped) paths as wrapped in quotes in DoShellCommand below

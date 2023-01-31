@@ -2,25 +2,99 @@
 Protected Class App
 Inherits Application
 	#tag Event
+		Sub Activate()
+		  if Keyboard().AsyncCommandKey then 
+		    
+		    me.showPreferences()
+		    
+		  end if
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub Close()
+		  me.savePreferences()
+		  
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
+		  me.loadPreferences()
+		  
 		  me.t = new TimerChecker()
 		  
+		  if Keyboard().AsyncCommandKey then 
+		    
+		    me.showPreferences()
+		    
+		  end if
+		  
 		  Timer.CallLater( 1000, WeakAddressOf me.Untitled )
+		  
+		  
 		End Sub
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h21
+		Private Function getApplicationDataFolder() As FolderItem
+		  // var f as FolderItem = SpecialFolder.ApplicationData.Child( me.getMainBundleIdentifier() )
+		  
+		  var f as FolderItem = new FolderItem( SpecialFolder.ApplicationData.NativePath + "/" + me.getMainBundleIdentifier(), FolderItem.PathModes.Native )
+		  
+		  if not f.Exists then
+		    
+		    f.CreateFolder()
+		    
+		  end if
+		  
+		  return f
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function getMainBundleIdentifier() As String
+		  const AppKit = "AppKit"
+		  
+		  declare function mainBundle lib AppKit selector "mainBundle" ( NSBundleClass as Ptr ) as Ptr
+		  
+		  declare function NSClassFromString lib AppKit ( className as CFStringRef ) as Ptr
+		  
+		  declare function getValue lib AppKit selector "bundleIdentifier" ( NSBundleRef as Ptr ) as CFStringRef
+		  
+		  var appId as String = getValue( mainBundle( NSClassFromString( "NSBundle" ) ) )
+		  
+		  return appId
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function getPreferencesFile() As FolderItem
+		  // return me.getApplicationDataFolder().Child( "preferences-v1.json" )
+		  
+		  return new FolderItem( me.getApplicationDataFolder().NativePath + "/" + "preferences-v1.json", FolderItem.PathModes.Native )
+		  
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub itsGrouchTime()
+		  if me.w <> nil then return
+		  
 		  if Keyboard().AsyncCommandKey then return
-		  
-		  var d as String = dock()
-		  
-		  var bits() as String = d.Split( "," )
 		  
 		  me.Untitled1()
 		  
 		  me.playAudio()
+		  
+		  if not me.preferencesJSON.Value( "animation" ) then return
 		  
 		  me.w = new WindowMain()
 		  
@@ -28,11 +102,63 @@ Inherits Application
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub loadPreferences()
+		  var data as String = ""
+		  
+		  try
+		    
+		    var t as TextInputStream = TextInputStream.Open( me.getPreferencesFile() )
+		    
+		    t.Encoding = Encodings.UTF8
+		    
+		    data = t.ReadAll()
+		    
+		    t.Close()
+		    
+		  catch e as IOException
+		    
+		    System.DebugLog( "Error preferences: " + e.Message )
+		    
+		  catch e as RuntimeException
+		    
+		    System.DebugLog( "Error preferences: " + e.Message )
+		    
+		  end try
+		  
+		  if data <> "" then
+		    
+		    me.preferencesJSON = new JSONItem( data )
+		    
+		  else
+		    
+		    me.preferencesJSON = new JSONItem( "{}" )
+		    
+		    me.preferencesJSON.Value( "animation" ) = true
+		    
+		    me.preferencesJSON.Value( "audio" ) = "both"
+		    
+		    me.preferencesJSON.Value( "vocalVolume" ) = 50
+		    
+		    me.preferencesJSON.Value( "musicVolume" ) = 10
+		    
+		    me.showPreferences()
+		    
+		  end if
+		  
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub playAudio()
+		  if me.preferencesJSON.Value( "audio" ) = "none" then return
+		  
 		  var fVocals as FolderItem = nil
 		  
 		  var fMusic as FolderItem = nil
+		  
+		  // TODO
 		  
 		  if me.alternate then
 		    
@@ -50,10 +176,82 @@ Inherits Application
 		  
 		  me.alternate = not me.alternate
 		  
-		  me.startPlayingAudioFile( fVocals, 100 )
+		  if me.preferencesJSON.Value( "audio" ) = "vocal" then
+		    
+		    me.startPlayingAudioFile( fVocals, me.preferencesJSON.Value( "vocalVolume" ) )
+		    
+		  elseif me.preferencesJSON.Value( "audio" ) = "music" then
+		    
+		    me.startPlayingAudioFile( fMusic, me.preferencesJSON.Value( "musicVolume" ) )
+		    
+		  elseif me.preferencesJSON.Value( "audio" ) = "both" then
+		    
+		    me.startPlayingAudioFile( fVocals, me.preferencesJSON.Value( "vocalVolume" ) )
+		    
+		    me.startPlayingAudioFile( fMusic, me.preferencesJSON.Value( "musicVolume" ) )
+		    
+		  else
+		    
+		    // silence is golden
+		    
+		  end if
 		  
-		  me.startPlayingAudioFile( fMusic, 100 )
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub savePreferences()
+		  me.preferencesJSON.Compact = false
+		  
+		  try
+		    
+		    var output as TextOutputStream = TextOutputStream.Create( me.getPreferencesFile() )
+		    
+		    output.Write( ConvertEncoding( me.preferencesJSON.ToString, Encodings.UTF8 ) )
+		    
+		    output.Close()
+		    
+		  catch e as IOException
+		    
+		    MessageBox( "Error preferences: " + e.Message )
+		    
+		  catch e as RuntimeException
+		    
+		    MessageBox( "Error preferences: " + e.Message )
+		    
+		  end try
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showAbout()
+		  if me.aboutWindow is nil then
+		    
+		    me.aboutWindow = new WindowAbout()
+		    
+		  else
+		    
+		    me.aboutWindow.Show()
+		    
+		  end if
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showPreferences()
+		  if me.preferencesWindow is nil then
+		    
+		    me.preferencesWindow = new WindowPreferences()
+		    
+		  else
+		    
+		    me.preferencesWindow.Show()
+		    
+		  end if
 		  
 		End Sub
 	#tag EndMethod
@@ -140,6 +338,10 @@ Inherits Application
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h0
+		aboutWindow As WindowAbout
+	#tag EndProperty
+
 	#tag Property, Flags = &h21
 		Private alternate As Boolean
 	#tag EndProperty
@@ -162,6 +364,14 @@ Inherits Application
 
 	#tag Property, Flags = &h21
 		Private openedPrefs As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		preferencesJSON As JSONItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		preferencesWindow As WindowPreferences
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
