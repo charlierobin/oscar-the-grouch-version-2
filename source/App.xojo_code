@@ -90,6 +90,10 @@ Inherits Application
 		  
 		  if Keyboard().AsyncCommandKey then return
 		  
+		  var s as ShellProcesses = new ShellProcesses()
+		  
+		  if s.musicRunning or s.podcastsRunning then return
+		  
 		  me.Untitled1()
 		  
 		  me.playAudio()
