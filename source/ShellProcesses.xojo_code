@@ -5,26 +5,45 @@ Inherits Shell
 		Sub Constructor()
 		  me.ExecuteMode = Shell.ExecuteModes.Synchronous
 		  
-		  me.Execute( "ps -ax | grep '[A]pplications/Music.app/Contents/MacOS/Music'" )
+		  
+		  
+		  // me.Execute( "ps -ax | grep '[A]pplications/Music.app/Contents/MacOS/Music'" )
+		  // 
+		  // var r as String = me.ReadAll()
+		  // 
+		  // me.musicRunning = if ( r <> "" , true, false )
+		  
+		  
+		  
+		  // me.Execute( "ps -ax | grep '[A]pplications/Podcasts.app/Contents/MacOS/Podcasts'" )
+		  // 
+		  // r = me.ReadAll()
+		  // 
+		  // me.podcastsRunning = if ( r <> "" , true, false )
+		  
+		  
+		  
+		  // me.Execute( "ps -ax | grep '[A]pplications/Books.app/Contents/MacOS/Books'" )
+		  // 
+		  // r = me.ReadAll()
+		  // 
+		  // me.booksRunning = if ( r <> "" , true, false )
+		  
+		  
+		  
+		  me.Execute( "ps -ax | grep -e '[A]pplications/Music.app/Contents/MacOS/Music' -e '[A]pplications/Podcasts.app/Contents/MacOS/Podcasts' -e '[A]pplications/Books.app/Contents/MacOS/Books'" )
 		  
 		  var r as String = me.ReadAll()
 		  
-		  // System.DebugLog( r )
-		  
-		  me.musicRunning = if ( r <> "" , true, false )
-		  
-		  me.Execute( "ps -ax | grep '[A]pplications/Podcasts.app/Contents/MacOS/Podcasts'" )
-		  
-		  r = me.ReadAll()
-		  
-		  // System.DebugLog( r )
-		  
-		  me.podcastsRunning = if ( r <> "" , true, false )
-		  
+		  me.somethingRunning = if ( r <> "" , true, false )
 		  
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		booksRunning As Boolean
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		musicRunning As Boolean
@@ -32,6 +51,10 @@ Inherits Shell
 
 	#tag Property, Flags = &h0
 		podcastsRunning As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		somethingRunning As Boolean
 	#tag EndProperty
 
 
@@ -147,6 +170,22 @@ Inherits Shell
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IsRunning"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="musicRunning"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="podcastsRunning"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""

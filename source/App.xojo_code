@@ -92,7 +92,9 @@ Inherits Application
 		  
 		  var s as ShellProcesses = new ShellProcesses()
 		  
-		  if s.musicRunning or s.podcastsRunning then return
+		  // if s.musicRunning or s.podcastsRunning or s.booksRunning then return
+		  
+		  if s.somethingRunning then return
 		  
 		  me.Untitled1()
 		  
