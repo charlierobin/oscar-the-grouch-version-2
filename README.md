@@ -16,5 +16,7 @@ The position and scale of the Oscar animation in relation to the trash icon coul
 
 https://user-images.githubusercontent.com/10506323/215374627-25e8b54f-9df1-491a-ae77-11b067845520.mp4
 
-(November 2nd 2024) Ooops ... forgot the link to the downloadable zipped prebuilt Mac Intel binary: https://www.dropbox.com/scl/fi/z648jk3d1ixd341l9rquo/Oscar-the-Grouch-alt.zip?rlkey=bf6ri8x1h9i7q7dlxcfcg1nh4&dl=0
+(November 2nd 2024) Ooops ... forgot the link to the downloadable zipped prebuilt Mac Intel binary:
+
+[Downloadable prebuilt Macintosh version](https://dl.dropboxusercontent.com/scl/fi/z648jk3d1ixd341l9rquo/Oscar-the-Grouch-alt.zip?dl=0)
 
