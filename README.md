@@ -18,5 +18,5 @@ https://user-images.githubusercontent.com/10506323/215374627-25e8b54f-9df1-491a-
 
 (November 2nd 2024) Ooops ... forgot the link to the downloadable zipped prebuilt Mac Intel binary:
 
-[Downloadable prebuilt Macintosh version](https://dl.dropboxusercontent.com/scl/fi/z648jk3d1ixd341l9rquo/Oscar-the-Grouch-alt.zip?dl=0)
+[Downloadable prebuilt Macintosh version](https://www.dropbox.com/scl/fi/z648jk3d1ixd341l9rquo/Oscar-the-Grouch-alt.zip?rlkey=wg4hff60vckluyijnhvdzjdvc&st=w2ygma65&dl=1)
 
