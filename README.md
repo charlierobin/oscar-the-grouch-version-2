@@ -22,3 +22,4 @@ https://user-images.githubusercontent.com/10506323/215374627-25e8b54f-9df1-491a-
 
 [Downloadable prebuilt Macintosh version](https://github.com/charlierobin/oscar-the-grouch-version-2/releases/download/v1.0.0/Oscar-the-Grouch-alt.zip)
 
+(September 2025) And changed the download link so it’s now a GitHub release.
