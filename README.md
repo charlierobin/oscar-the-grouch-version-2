@@ -1,4 +1,6 @@
-# The Grouch for macOS
+# Oscar The Grouch for Macintosh (macOS)
+
+Another of my attempts at a new version of Oscar the Grouch for macOS (OSX).
 
 (See also [this first attempt at the problem](https://github.com/charlierobin/oscar-the-grouch-version-1))
 
